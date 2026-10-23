@@ -19,7 +19,8 @@
 <link rel="apple-touch-icon" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap"></noscript>
 <script>
   // Runs before paint: enables reveal styles and decides whether to play the brush intro (once per session).
   (function (d) {
@@ -405,7 +406,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
 
 <header class="header" id="top">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="King Fisher Paint Co home">
+    <a class="brand" href="#top">
       <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#0B5F6E"/><path d="M38 14c-7 0-12 5-12 12v1L8 31l18 3c1 9 8 15 17 15 3 0 6-1 8-2l5 5-1-8c3-3 4-7 4-11 0-11-9-19-21-19z" fill="#3CC3C3"/><path d="M27 35c3 7 9 11 16 11 3 0 6-1 8-2-2-6-8-10-15-10-3 0-6 0-9 1z" fill="#F08A3C"/><circle cx="38" cy="24" r="2.6" fill="#0A2E36"/></svg>
       <span><b>King Fisher</b><small>Paint Co · Astoria NY</small></span>
     </a>
