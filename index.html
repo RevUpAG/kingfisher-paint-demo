@@ -89,14 +89,15 @@ p{margin:0}
 @media (min-width:900px){.nav{display:flex}.phone-link{display:inline}}
 
 /* ---------- Buttons ---------- */
-.btn{--bg:var(--teal);--fg:#fff;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;padding:0 22px;border-radius:999px;border:0;background:var(--bg);color:var(--fg);font:600 15.5px/1 var(--sans);text-decoration:none;cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .2s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(11,95,110,.55)}
+.btn{--bg:var(--teal);--fg:#fff;position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;padding:0 24px;border:0;background:none;color:var(--fg);font:600 15.5px/1 var(--sans);text-decoration:none;white-space:nowrap;cursor:pointer;transition:transform .25s var(--ease)}
+/* brush-stroke paint: ragged mask + bristle streaks + roller grain (on ::before so focus rings stay unmasked) */
+.btn::before{content:"";position:absolute;inset:-3px -8px;z-index:-1;background:url(assets/grain.svg),repeating-linear-gradient(180deg,rgba(255,255,255,.1) 0 1px,transparent 1px 4px,rgba(0,0,0,.07) 4px 5px,transparent 5px 8px),linear-gradient(180deg,rgba(255,255,255,.16),transparent 45%,rgba(0,0,0,.14)),var(--bg);-webkit-mask:url(assets/brush.svg) 0 0/100% 100% no-repeat;mask:url(assets/brush.svg) 0 0/100% 100% no-repeat;transition:transform .4s var(--ease),filter .25s}
+.btn:hover{transform:translateY(-2px)}
+.btn:hover::before{transform:scale(1.04,1.1) rotate(-.6deg);filter:saturate(1.15) brightness(1.05)}
 .btn:active{transform:translateY(0)}
 .btn svg{width:19px;height:19px;flex:none}
 .btn-orange{--bg:var(--orange);--fg:var(--ink)}
-.btn-orange:hover{box-shadow:0 10px 24px -10px rgba(240,138,60,.7)}
-.btn-ghost{--bg:#fff;--fg:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
-.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px var(--teal),0 10px 24px -14px rgba(19,37,43,.3)}
+.btn-ghost{--bg:#CDEBE8;--fg:var(--ink)}
 .btn-wa{--bg:#1F9E58;--fg:#fff}
 .btn-sm{min-height:42px;padding:0 16px;font-size:14px}
 
@@ -107,13 +108,17 @@ p{margin:0}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--teal);background:var(--turq-100);padding:7px 13px;border-radius:999px}
 .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--orange)}
 .hero h1{font-size:clamp(38px,8.6vw,68px);margin:20px 0 18px}
-.hero h1 .stroke{position:relative;white-space:nowrap;z-index:0}
-.hero h1 .stroke::after{content:"";position:absolute;left:-4%;right:-4%;bottom:.04em;height:.36em;z-index:-1;background:var(--orange);opacity:.55;border-radius:40% 60% 50% 45%/60% 40% 60% 45%;transform-origin:left;transform:scaleX(0) rotate(-1.5deg);animation:swipe .9s var(--ease) .6s forwards}
-.intro .hero h1 .stroke::after{animation-delay:2.4s}
-@keyframes swipe{to{transform:scaleX(1) rotate(-1.5deg)}}
+.stroke{position:relative;white-space:nowrap;z-index:0}
+.stroke::after{content:"";position:absolute;left:-5%;right:-5%;bottom:.01em;height:.44em;z-index:-1;background:url(assets/grain.svg),repeating-linear-gradient(180deg,rgba(255,255,255,.1) 0 1px,transparent 1px 4px,rgba(0,0,0,.07) 4px 5px,transparent 5px 8px),var(--orange);opacity:.62;-webkit-mask:url(assets/brush.svg) 0 0/100% 100% no-repeat;mask:url(assets/brush.svg) 0 0/100% 100% no-repeat;clip-path:inset(0 100% 0 0);transform:rotate(-1.2deg)}
+.hero .stroke::after,.in .stroke::after{animation:paintIn .9s var(--ease) .35s forwards}
+.hero .stroke::after{animation-delay:.6s}
+.intro .hero .stroke::after{animation-delay:2.4s}
+.sec-teal .stroke::after{opacity:.85}
+html:not(.js) .stroke::after{clip-path:none}
+@keyframes paintIn{to{clip-path:inset(0 0 0 0)}}
 .hero .lead{font-size:clamp(17px,2.2vw,19px);color:var(--muted);max-width:560px}
 .hero .lead b{color:var(--ink);font-weight:600}
-.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:16px 22px;margin-top:30px}
 .hero-ctas .btn{flex:1 1 220px}
 @media (min-width:560px){.hero-ctas .btn{flex:0 0 auto}}
 .hero-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-size:14px;color:var(--muted)}
@@ -126,23 +131,25 @@ p{margin:0}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
 /* Swatch fan (illustration, not a photo) */
-.swatches{position:relative;height:340px;max-width:440px;width:100%;margin-inline:auto}
-.chip{position:absolute;left:50%;bottom:24px;width:150px;height:250px;margin-left:-75px;border-radius:16px;background:#fff;box-shadow:var(--shadow);transform-origin:50% 92%;padding:10px 10px 0;transition:transform .6s var(--ease)}
-.chip div{height:170px;border-radius:10px;background:var(--c)}
-.chip b{display:block;font:600 13px/1.2 var(--sans);margin-top:12px}
-.chip small{font-size:11px;color:var(--muted);letter-spacing:.04em}
+.hero-visual{position:relative;width:100%;max-width:470px;margin-inline:auto;aspect-ratio:1/1}
+.hero-img{position:absolute;right:0;top:0;width:86%;height:86%;object-fit:cover;-webkit-mask:url(assets/patch.svg) 0 0/100% 100% no-repeat;mask:url(assets/patch.svg) 0 0/100% 100% no-repeat}
+.swatches{position:absolute;left:0;bottom:0;width:56%;height:56%}
+.chip{position:absolute;left:50%;bottom:6px;width:96px;height:156px;margin-left:-48px;border-radius:12px;background:#fff;box-shadow:var(--shadow);transform-origin:50% 92%;padding:7px 7px 0;transition:transform .6s var(--ease)}
+.chip div{height:104px;border-radius:7px;background:var(--c)}
+.chip b{display:block;font:600 11px/1.2 var(--sans);margin-top:8px}
+.chip small{font-size:9.5px;color:var(--muted);letter-spacing:.04em}
 .chip:nth-child(1){transform:rotate(-24deg) translateX(-14px)}
 .chip:nth-child(2){transform:rotate(-8deg)}
 .chip:nth-child(3){transform:rotate(8deg)}
 .chip:nth-child(4){transform:rotate(24deg) translateX(14px)}
-.swatches:hover .chip:nth-child(1){transform:rotate(-30deg) translateX(-26px)}
-.swatches:hover .chip:nth-child(2){transform:rotate(-11deg) translateY(-6px)}
-.swatches:hover .chip:nth-child(3){transform:rotate(11deg) translateY(-6px)}
-.swatches:hover .chip:nth-child(4){transform:rotate(30deg) translateX(26px)}
+.hero-visual:hover .chip:nth-child(1){transform:rotate(-30deg) translateX(-26px)}
+.hero-visual:hover .chip:nth-child(2){transform:rotate(-11deg) translateY(-6px)}
+.hero-visual:hover .chip:nth-child(3){transform:rotate(11deg) translateY(-6px)}
+.hero-visual:hover .chip:nth-child(4){transform:rotate(30deg) translateX(26px)}
 .hero-badge{position:absolute;right:0;top:18px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:12px 14px;font-size:13px;line-height:1.35;display:flex;gap:10px;align-items:center;z-index:2}
 .hero-badge svg{width:30px;height:30px;color:var(--turq)}
 .hero-badge b{display:block;font-size:14px}
-@media (min-width:900px){.hero{padding:72px 0 88px}.hero .wrap{grid-template-columns:1.15fr .85fr}.swatches{height:420px}.chip{width:170px;height:280px;margin-left:-85px}.chip div{height:196px}}
+@media (min-width:900px){.hero{padding:72px 0 88px}.hero .wrap{grid-template-columns:1.15fr .85fr}.chip{width:118px;height:190px;margin-left:-59px}.chip div{height:128px}}
 
 /* ---------- Brush intro ---------- */
 #intro{display:none}
@@ -191,9 +198,11 @@ section{scroll-margin-top:76px}
 .grid-services{display:grid;gap:18px}
 @media (min-width:680px){.grid-services{grid-template-columns:repeat(2,1fr)}}
 @media (min-width:1020px){.grid-services{grid-template-columns:repeat(3,1fr)}}
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
+.card{--pad:28px;position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:var(--pad);transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
 .card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:transparent}
-.svc-ico{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;background:var(--turq-100);color:var(--teal);margin-bottom:20px;transition:transform .4s var(--ease)}
+.svc-img{display:block;width:calc(100% + 2*var(--pad));max-width:none;height:auto;aspect-ratio:720/440;object-fit:cover;margin:calc(var(--pad)*-1) calc(var(--pad)*-1) 0;-webkit-mask:url(assets/edge.svg) 0 0/100% 100% no-repeat;mask:url(assets/edge.svg) 0 0/100% 100% no-repeat;transition:transform .6s var(--ease)}
+.card:hover .svc-img{transform:scale(1.03)}
+.svc-ico{position:relative;width:58px;height:58px;border-radius:16px;display:grid;place-items:center;background:var(--turq-100);color:var(--teal);margin:-30px 0 18px;box-shadow:0 0 0 5px #fff;transition:transform .4s var(--ease)}
 .card:hover .svc-ico{transform:rotate(-6deg) scale(1.06)}
 .svc-ico svg{width:32px;height:32px}
 .card h3{font-size:23px;margin-bottom:10px}
@@ -203,9 +212,9 @@ section{scroll-margin-top:76px}
 .card li::before{content:"";flex:none;width:16px;height:16px;margin-top:3px;border-radius:50%;background:var(--turq-100) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.2 2.2 4.8-4.8' fill='none' stroke='%230B5F6E' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px}
 .card.feature{background:var(--teal);color:#fff;border-color:var(--teal)}
 .card.feature p,.card.feature li{color:#CFE7E6}
-.card.feature .svc-ico{background:rgba(255,255,255,.12);color:#fff}
+.card.feature .svc-ico{background:#1F7684;color:#fff;box-shadow:0 0 0 5px var(--teal)}
 .card.feature li::before{background-color:rgba(255,255,255,.18);filter:brightness(2.4)}
-.card .tag{display:inline-block;font-size:12px;font-weight:600;background:var(--orange);color:var(--ink);padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.card .tag{position:absolute;top:14px;left:14px;z-index:1;display:inline-block;font-size:12px;font-weight:600;background:var(--orange);color:var(--ink);padding:4px 10px;border-radius:999px;margin-bottom:14px}
 
 /* Estimator */
 .est{display:grid;gap:22px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:clamp(20px,4vw,40px);box-shadow:var(--shadow)}
@@ -282,6 +291,7 @@ input[type=range]{flex:1;accent-color:var(--teal);height:28px}
 /* Areas */
 .areas{display:grid;gap:22px}
 @media (min-width:900px){.areas{grid-template-columns:1fr 1fr;align-items:center}}
+.area-img{display:none;width:100%;height:auto;aspect-ratio:1100/480;object-fit:cover;margin-bottom:24px;-webkit-mask:url(assets/patch.svg) 0 0/100% 100% no-repeat;mask:url(assets/patch.svg) 0 0/100% 100% no-repeat}
 .map{background:#fff;border:1px solid var(--line);border-radius:24px;padding:16px}
 .map svg{width:100%;height:auto}
 .map .pin{transition:transform .3s var(--ease);transform-box:fill-box;transform-origin:50% 100%}
@@ -376,16 +386,16 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
   .carousel::-webkit-scrollbar{display:none}
   .carousel>*{flex:0 0 84%;scroll-snap-align:start;min-width:0}
   .js .carousel>.reveal{opacity:1;transform:none}
-  .carousel .card,.carousel .review{padding:24px}
+  .carousel .card{--pad:24px}
+  .carousel .review{padding:24px}
   .carousel .card:hover,.carousel .review:hover{transform:none}
   .steps.carousel>li{flex-basis:72%}
   .dots{display:flex;justify-content:center;gap:2px;margin-top:8px}
   .dots button{display:grid;place-items:center;min-width:24px;height:24px;padding:0;border:0;background:none;cursor:pointer}
   .dots button::before{content:"";width:8px;height:8px;border-radius:8px;background:#CFC6B8;transition:width .35s var(--ease),background .35s}
   .dots button[aria-current=true]::before{width:26px;background:var(--teal)}
-  .swatches{height:250px;max-width:300px}
-  .chip{width:120px;height:190px;margin-left:-60px;bottom:10px}
-  .chip div{height:126px}
+  .hero-visual{max-width:340px}
+  .area-img{display:block}
   .hero{padding:32px 0 40px}
   .hero .wrap{gap:28px}
   .map{display:none}
@@ -474,12 +484,15 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 19c8 0 14-6 14-14-8 0-14 6-14 14zM5 19l7-7"/></svg> Zero-VOC options</span>
       </div>
     </div>
-    <div class="swatches fade-up" style="--d:.3s" aria-hidden="true">
-      <div class="hero-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><b>Free estimates</b>Astoria &amp; all NYC</span></div>
-      <div class="chip"><div style="--c:#C96A2B"></div><b>Astoria Terracotta</b><small>Warm accent</small></div>
-      <div class="chip"><div style="--c:#E9D8A6"></div><b>Warm Amber</b><small>Soft neutral</small></div>
-      <div class="chip"><div style="--c:#2BB3B1"></div><b>Electric Cyan</b><small>Bright &amp; fresh</small></div>
-      <div class="chip"><div style="--c:#0B5F6E"></div><b>Kingfisher Teal</b><small>Signature</small></div>
+    <div class="hero-visual fade-up" style="--d:.3s">
+      <img class="hero-img" src="assets/img/hero.webp" alt="Paint roller applying fresh blue paint to a white wall" width="760" height="740" fetchpriority="high">
+      <div class="hero-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><b>Free estimates</b>Astoria &amp; all NYC</span></div>
+      <div class="swatches" aria-hidden="true">
+        <div class="chip"><div style="--c:#C96A2B"></div><b>Astoria Terracotta</b><small>Warm accent</small></div>
+        <div class="chip"><div style="--c:#E9D8A6"></div><b>Warm Amber</b><small>Soft neutral</small></div>
+        <div class="chip"><div style="--c:#2BB3B1"></div><b>Electric Cyan</b><small>Bright &amp; fresh</small></div>
+        <div class="chip"><div style="--c:#0B5F6E"></div><b>Kingfisher Teal</b><small>Signature</small></div>
+      </div>
     </div>
   </div>
 </section>
@@ -498,35 +511,40 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">Services</span>
-      <h2 id="svc-h">Built for NYC apartments, Queens brownstones &amp; storefronts</h2>
+      <h2 id="svc-h">Built for NYC apartments, Queens brownstones &amp; <span class="stroke">storefronts</span></h2>
       <p>Careful prep, crisp lines and a clean space when we leave — whatever the size of the job.</p>
     </div>
     <div class="grid-services carousel" aria-label="Services">
       <article class="card reveal">
+        <img class="svc-img" src="assets/img/interior.webp" alt="Paint roller rolling white paint onto a wall" width="720" height="440" loading="lazy" decoding="async">
         <div class="svc-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="20" height="8" rx="2"/><path d="M25 8h2v7H16v4"/><rect x="13.5" y="19" width="5" height="9" rx="1.5"/></svg></div>
         <h3>Interior Painting</h3>
         <p>Walls, ceilings, trim and doors with precision prep and flawless low- and zero-VOC finishes.</p>
         <ul><li>Drywall repair &amp; priming</li><li>Clean, sharp edge lines</li><li>Furniture &amp; floors fully protected</li></ul>
       </article>
       <article class="card reveal" style="--d:.08s">
+        <img class="svc-img" src="assets/img/exterior.webp" alt="Classic New York brownstone facades with ornate cornices" width="720" height="440" loading="lazy" decoding="async">
         <div class="svc-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 28V9l10-5 10 5v19"/><path d="M10 13h3v4h-3zM19 13h3v4h-3zM13 28v-6h6v6"/><path d="M3 28h26M9 28l-2 0M19 24h6"/></svg></div>
         <h3>Exterior &amp; Brownstone Restoration</h3>
         <p>Weather-resistant coatings made for NYC winters and humid summers, preserving historic detail.</p>
         <ul><li>Masonry &amp; siding wash</li><li>Historic detail preservation</li><li>Stoops, railings &amp; cornices</li></ul>
       </article>
       <article class="card reveal" style="--d:.16s">
+        <img class="svc-img" src="assets/img/cabinets.webp" alt="Kitchen with sea-green painted cabinets" width="720" height="440" loading="lazy" decoding="async">
         <div class="svc-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="24" height="22" rx="2"/><path d="M16 5v22M4 15h24"/><path d="M12 9v3M20 9v3M12 19v3M20 19v3" stroke-linecap="round"/></svg></div>
         <h3>Cabinet Refinishing</h3>
         <p>Give dated kitchen cabinets a factory-smooth spray finish — a fraction of the cost of replacing them.</p>
         <ul><li>Factory-style spray finish</li><li>Hardware replacement</li><li>Minimal kitchen downtime</li></ul>
       </article>
       <article class="card reveal">
+        <img class="svc-img" src="assets/img/commercial.webp" alt="Brick storefronts along a New York City sidewalk" width="720" height="440" loading="lazy" decoding="async">
         <div class="svc-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l2-7h20l2 7"/><path d="M4 12a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M6 15v12h20V15M13 27v-7h6v7"/></svg></div>
         <h3>Commercial &amp; Retail</h3>
         <p>Offices, restaurants and storefronts painted outside your business hours, so you never lose a day.</p>
         <ul><li>Evening &amp; overnight shifts</li><li>High-durability paints</li><li>Zero retail downtime</li></ul>
       </article>
       <article class="card feature reveal" style="--d:.08s">
+        <img class="svc-img" src="assets/img/nursery.webp" alt="Bright nursery with a white crib and armchair" width="720" height="440" loading="lazy" decoding="async">
         <span class="tag">Healthier home</span>
         <div class="svc-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M16 4s-9 9.5-9 15a9 9 0 0 0 18 0C25 13.5 16 4 16 4z"/><path d="M12 21c2 2 5 2 7 0M16 15v10" stroke-linecap="round"/></svg></div>
         <h3>Zero-VOC Paints</h3>
@@ -534,6 +552,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
         <ul><li>Safe for kids &amp; pets</li><li>Move back in sooner</li></ul>
       </article>
       <article class="card reveal" style="--d:.16s">
+        <img class="svc-img" src="assets/img/swatches.webp" alt="Four paint color samples dabbed on a white wall" width="720" height="440" loading="lazy" decoding="async">
         <div class="svc-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="11"/><circle cx="11" cy="13" r="1.8" fill="currentColor"/><circle cx="17" cy="10" r="1.8" fill="currentColor"/><circle cx="21.5" cy="15" r="1.8" fill="currentColor"/><path d="M14 22a2.5 2.5 0 0 0 5 0c0-1.5-2.5-4-2.5-4S14 20.5 14 22z"/></svg></div>
         <h3>Color Help Included</h3>
         <p>Not sure between three whites and a navy? We help you choose shades and sheen that suit your light and space.</p>
@@ -547,7 +566,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">Price estimator</span>
-      <h2 id="est-h">See a ballpark price in 20 seconds</h2>
+      <h2 id="est-h">See a ballpark price in <span class="stroke">20 seconds</span></h2>
       <p>Pick your job, size and paint level. Then send it with your quote request so we can confirm the real number.</p>
     </div>
     <form class="est reveal" id="est" onsubmit="return false">
@@ -603,7 +622,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">Recent work</span>
-      <h2 id="work-h">Before &amp; after</h2>
+      <h2 id="work-h">Before &amp; <span class="stroke">after</span></h2>
       <p>Real project photos go here — every tile is a ready-made before/after slot.</p>
     </div>
     <div class="gallery carousel" aria-label="Recent work">
@@ -621,7 +640,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
   <div class="wrap">
     <div class="sec-head center reveal">
       <span class="kicker">Neighbors talk</span>
-      <h2 id="rev-h">What Queens homeowners say</h2>
+      <h2 id="rev-h">What Queens <span class="stroke">homeowners</span> say</h2>
     </div>
     <div class="reviews carousel" data-autoplay aria-label="Reviews">
       <figure class="review reveal">
@@ -652,7 +671,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">How it works</span>
-      <h2 id="pro-h">Four simple steps, no surprises</h2>
+      <h2 id="pro-h">Four simple steps, <span class="stroke">no surprises</span></h2>
     </div>
     <ol class="steps carousel" aria-label="Our process">
       <li class="reveal"><span class="bar"></span><h3>Free quote</h3><p>Send photos or book a visit. You get a clear, written price — no pressure.</p></li>
@@ -668,9 +687,10 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
     <div class="reveal">
       <div class="sec-head" style="margin-bottom:28px">
         <span class="kicker">Service areas</span>
-        <h2 id="area-h">Based in Astoria. Painting all over NYC.</h2>
+        <h2 id="area-h">Based in Astoria. Painting <span class="stroke">all over NYC.</span></h2>
         <p>Your neighbors, not a call center — we know these buildings, stoops and co-op rules.</p>
       </div>
+      <img class="area-img" src="assets/img/street.webp" alt="Tree-lined New York street of rowhouses with stoops" width="1100" height="480" loading="lazy" decoding="async">
       <div class="boro"><h3>Queens</h3><ul class="pills"><li class="home">Astoria</li><li>Ditmars</li><li>Steinway</li><li>Long Island City</li><li>Sunnyside</li><li>Woodside</li></ul></div>
       <div class="boro"><h3>Brooklyn</h3><ul class="pills"><li>Greenpoint</li><li>Williamsburg</li></ul></div>
       <div class="boro" style="margin:0"><h3>Everywhere else</h3><ul class="pills"><li>Rest of NYC — just ask</li></ul></div>
@@ -705,7 +725,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
   <div class="wrap">
     <div class="sec-head center reveal">
       <span class="kicker">FAQ</span>
-      <h2 id="faq-h">Good questions, straight answers</h2>
+      <h2 id="faq-h">Good questions, <span class="stroke">straight answers</span></h2>
     </div>
     <div class="faq reveal">
       <details><summary>Are estimates really free?</summary><p>Yes. Send a few photos through the form or WhatsApp, or ask for a visit, and you'll get a free written estimate with no obligation.</p></details>
@@ -723,7 +743,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
   <div class="wrap quote">
     <div class="quote-aside reveal">
       <span class="kicker">Free quote</span>
-      <h2 id="q-h">Tell us about your project</h2>
+      <h2 id="q-h">Tell us about your <span class="stroke">project</span></h2>
       <p>Four quick steps. When you hit send, WhatsApp opens with everything already written — just press send.</p>
       <ul>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>No obligation, no pressure</li>
@@ -817,7 +837,7 @@ select.input{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmln
       <p>Astoria · Ditmars · Steinway · Long Island City · Sunnyside · Woodside · Greenpoint · Williamsburg · rest of NYC</p>
     </div>
   </div>
-  <div class="wrap legal"><span>© 2026 King Fisher Paint Co</span><span>Demo website prepared by Rev Up Agency Group</span></div>
+  <div class="wrap legal"><span>© 2026 King Fisher Paint Co</span><span>Demo website prepared by Rev Up Agency Group · Illustrative photos: Unsplash</span></div>
 </footer>
 
 <a class="wa-float wa-link" href="https://wa.me/16084440296?text=Hi!%20I'd%20like%20a%20free%20painting%20quote" target="_blank" rel="noopener" aria-label="Message King Fisher Paint Co on WhatsApp">
